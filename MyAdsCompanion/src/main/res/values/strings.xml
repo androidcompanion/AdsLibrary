@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="sa_id">000000</string>
+
+    <string name="it_s_time_to_upgrade">It\'s Time to Upgrade..</string>
+    <string name="version">Version-</string>
+    <string name="new_videos_added">New Videos Added.</string>
+    <string name="update_now">Update Now</string>
+    <string name="this_is_the_notification_message">This is the Notification Message</string>
+    <string name="ok">OK</string>
+    <string name="check_out_our_new_app">Check out our new App</string>
+    <string name="download">Download</string>
+    <string name="create_unique_photo_for_instagram_and_facebook_for_free">Create unique photo for instagram and facebook for free</string>
+    <string name="unique_photo_cut">Unique Photo Cut</string>
+    <string name="cancel">Cancel</string>
+    <string name="update_available">Update Available!!</string>
+    <string name="ad">AD</string>
+</resources>

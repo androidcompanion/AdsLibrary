@@ -1,0 +1,3 @@
+include ':MyAdsCompanion'
+include ':app'
+rootProject.name = "AdsLibraryProject"
