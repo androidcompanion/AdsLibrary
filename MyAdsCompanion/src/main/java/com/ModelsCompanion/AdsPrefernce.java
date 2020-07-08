@@ -467,7 +467,7 @@ public class AdsPrefernce {
     public boolean extraString1() {
         boolean output = false;
         if (adsPreference != null) {
-            output = Objects.equals(adsPreference.getString("extraStringPara1", "0"), "1");
+            output = Objects.equals(adsPreference.getString("extraStringPara1", ads.EXTRASTRING1DEFAULT()), "1");
         }
         return output;
     }

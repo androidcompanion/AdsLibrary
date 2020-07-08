@@ -19,7 +19,7 @@ public class DefaultAdsIds {
     public void setPrimaryAdIds(String g_app_id, String g_banner1, String g_banner2, String g_inter1, String g_inter2, String g_inter3, String g_native1, String g_native2, String g_rewarded1,
                                 String g_rewarded2, String fb_banner1, String fb_banner2, String fb_inter1, String fb_inter2, String fb_inter3, String fb_native1, String fb_native2,
                                 String fb_native_banner1, String fb_native_banner2, String fb_med_rect1, String fb_med_rec2, String fb_rewarded1, String fb_rewarded2, String sa_app_id, String app_key,
-                                Boolean disable_splash, Boolean show_notification, Boolean show_loading, int tint_Mode) {
+                                Boolean disable_splash, Boolean show_notification, Boolean show_loading, int tint_Mode, String extraString1default) {
 
         editor = defaultAdsPreference.edit();
         editor.putString("g_app_id", g_app_id);
@@ -50,6 +50,7 @@ public class DefaultAdsIds {
         editor.putBoolean("disable_splash", disable_splash);
         editor.putBoolean("show_notification", show_notification);
         editor.putBoolean("show_loading", show_loading);
+        editor.putString("extraString1", extraString1default);
         editor.putInt("tint_Mode", tint_Mode);
         editor.apply();
 
@@ -169,6 +170,10 @@ public class DefaultAdsIds {
 
     public Boolean SHOW_LOADING() {
         return defaultAdsPreference.getBoolean("show_loading", false);
+    }
+
+    public String EXTRASTRING1DEFAULT() {
+        return defaultAdsPreference.getString("extraString1", "0");
     }
 
 
