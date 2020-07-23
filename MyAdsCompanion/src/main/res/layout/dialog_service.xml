@@ -75,8 +75,8 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_margin="5dp"
-                app:cardBackgroundColor="@color/white"
-                android:background="@color/white"
+                app:cardBackgroundColor="@android:color/white"
+                android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -351,7 +351,7 @@
                             android:gravity="center"
                             android:padding="10dp"
                             android:text="@string/download"
-                            android:textColor="@color/white"
+                            android:textColor="@android:color/white"
                             android:textSize="15sp" />
 
                         <TextView
@@ -365,7 +365,7 @@
                             android:gravity="center"
                             android:padding="10dp"
                             android:text="@string/cancel"
-                            android:textColor="@color/white"
+                            android:textColor="@android:color/white"
                             android:textSize="15sp"
                             android:visibility="visible" />
 
