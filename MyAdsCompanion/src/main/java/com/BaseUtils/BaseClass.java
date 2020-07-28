@@ -402,7 +402,8 @@ public class BaseClass extends AppCompatActivity {
         // Inflate the Ad view.  The layout referenced is the one you created in the last step.
         FrameLayout adContainer = (FrameLayout)findViewById(R.id.native_banner_container);
         LinearLayout adView = (LinearLayout) inflater.inflate(R.layout.native_banner_ad_layout_facebook, adContainer, false);
-        nativeAdLayout.addView(adView);
+//        nativeAdLayout.addView(adView);
+        adContainer.addView(adView);
 
         // Add the AdChoices icon
         RelativeLayout adChoicesContainer = adView.findViewById(R.id.ad_choices_container);
