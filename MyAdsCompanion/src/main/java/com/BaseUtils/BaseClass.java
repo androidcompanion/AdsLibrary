@@ -349,37 +349,42 @@ public class BaseClass extends AppCompatActivity {
                     adContainerView.addView(startAppBanner, bannerParameters);
                 }
             } else {
-                com.facebook.ads.AdView adView;
+                final NativeBannerAd nativeBannerAd;
                 AudienceNetworkAds.initialize(this);
-                adView = new com.facebook.ads.AdView(this, defaultAdsIds.FB_BANNER1(), com.facebook.ads.AdSize.BANNER_HEIGHT_50);
-                final FrameLayout adContainerView = findViewById(R.id.banner_container);
+                nativeBannerAd = new NativeBannerAd(this, defaultAdsIds.FB_NATIVE_BANNER1());
+                final FrameLayout adContainerView = findViewById(R.id.native_banner_container);
                 adContainerView.setVisibility(View.VISIBLE);
+//                            adContainerView.addView(nativeBannerAd);
                 adContainerView.setPadding(0, top, 0, bottom);
-                adContainerView.addView(adView);
-                adView.loadAd();
-                adView.setAdListener(new AdListener() {
+                nativeBannerAd.loadAd();
+                nativeBannerAd.setAdListener(new NativeAdListener() {
+                    @Override
+                    public void onMediaDownloaded(Ad ad) {
+                        // Native ad finished downloading all assets
+                    }
+
                     @Override
                     public void onError(Ad ad, AdError adError) {
-
+                        // Native ad failed to load
                     }
 
                     @Override
                     public void onAdLoaded(Ad ad) {
+                        // Native ad is loaded and ready to be displayed
+                        inflateNativeBannerAdFacebook(nativeBannerAd);
                         adContainerView.setBackground(getResources().getDrawable(R.drawable.bg_banner));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             getResources().getDrawable(R.drawable.bg_banner).setTint(defaultAdsIds.TINT_COLOR());
-                        }
-
-                    }
+                        }}
 
                     @Override
                     public void onAdClicked(Ad ad) {
-
+                        // Native ad clicked
                     }
 
                     @Override
                     public void onLoggingImpression(Ad ad) {
-
+                        // Native ad impression
                     }
                 });
 
