@@ -14,7 +14,9 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,11 +35,18 @@ import com.ModelsCompanion.GsonUtils;
 import com.bumptech.glide.Glide;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
+import com.facebook.ads.AdIconView;
 import com.facebook.ads.AdListener;
+import com.facebook.ads.AdOptionsView;
 import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.InterstitialAd;
 import com.facebook.ads.InterstitialAdListener;
+import com.facebook.ads.NativeAdLayout;
+import com.facebook.ads.NativeAdListener;
+import com.facebook.ads.NativeBannerAd;
+import com.facebook.ads.NativeBannerAdView;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
@@ -55,6 +64,7 @@ import com.startapp.sdk.adsbase.StartAppSDK;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
@@ -233,6 +243,188 @@ public class BaseClass extends AppCompatActivity {
         int adWidth = (int) (widthPixels / density);
 
         return com.google.android.gms.ads.AdSize.getPortraitAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    public void showNativeBannerAd(Integer top, Integer bottom) {
+        if (isNetworkAvailable(this)) {
+            if (isAdsAvailable) {
+                if (!adsPrefernce.showStartApp()) {
+                    if (adsPrefernce.showgBanner1()) {
+                        AdView gadView;
+                        MobileAds.initialize(this, adsPrefernce.gAppId());
+                        final FrameLayout adContainerView = this.findViewById(R.id.banner_container);
+                        adContainerView.setVisibility(View.VISIBLE);
+                        gadView = new AdView(this);
+                        adContainerView.setPadding(0, top, 0, bottom);
+                        gadView.setAdUnitId(adsPrefernce.gBannerId1());
+                        adContainerView.addView(gadView);
+                        AdRequest adRequest = new AdRequest.Builder().build();
+                        gadView.setAdSize(AdSize.LARGE_BANNER);
+                        gadView.loadAd(adRequest);
+                        gadView.setAdListener(new com.google.android.gms.ads.AdListener() {
+                            @Override
+                            public void onAdLoaded() {
+                                super.onAdLoaded();
+                                adContainerView.setBackground(getResources().getDrawable(R.drawable.bg_banner));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    getResources().getDrawable(R.drawable.bg_banner).setTint(defaultAdsIds.TINT_COLOR());
+                                }
+                            }
+                        });
+                    } else {
+                        final NativeBannerAd nativeBannerAd;
+                        if (adsPrefernce.showfbBanner1()) {
+                            AudienceNetworkAds.initialize(this);
+                            nativeBannerAd = new NativeBannerAd(this, adsPrefernce.fbNativeBannerId());
+                            final FrameLayout adContainerView = findViewById(R.id.native_banner_container);
+                            adContainerView.setVisibility(View.VISIBLE);
+//                            adContainerView.addView(nativeBannerAd);
+                            adContainerView.setPadding(0, top, 0, bottom);
+                            nativeBannerAd.loadAd();
+                            nativeBannerAd.setAdListener(new NativeAdListener() {
+                                @Override
+                                public void onMediaDownloaded(Ad ad) {
+                                    // Native ad finished downloading all assets
+                                }
+
+                                @Override
+                                public void onError(Ad ad, AdError adError) {
+                                    // Native ad failed to load
+                                }
+
+                                @Override
+                                public void onAdLoaded(Ad ad) {
+                                    // Native ad is loaded and ready to be displayed
+                                    inflateNativeBannerAdFacebook(nativeBannerAd);
+                                    adContainerView.setBackground(getResources().getDrawable(R.drawable.bg_banner));
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        getResources().getDrawable(R.drawable.bg_banner).setTint(defaultAdsIds.TINT_COLOR());
+                                    }}
+
+                                @Override
+                                public void onAdClicked(Ad ad) {
+                                    // Native ad clicked
+                                }
+
+                                @Override
+                                public void onLoggingImpression(Ad ad) {
+                                    // Native ad impression
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    final FrameLayout adContainerView = (FrameLayout) findViewById(R.id.banner_container);
+                    Banner startAppBanner = new Banner(this, new BannerListener() {
+                        @Override
+                        public void onReceiveAd(View view) {
+                            adContainerView.setBackground(getResources().getDrawable(R.drawable.bg_banner));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                getResources().getDrawable(R.drawable.bg_banner).setTint(defaultAdsIds.TINT_COLOR());
+                            }
+                        }
+
+                        @Override
+                        public void onFailedToReceiveAd(View view) {
+
+                        }
+
+                        @Override
+                        public void onImpression(View view) {
+
+                        }
+
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                    FrameLayout.LayoutParams bannerParameters =
+                            new FrameLayout.LayoutParams(
+                                    FrameLayout.LayoutParams.MATCH_PARENT,
+                                    FrameLayout.LayoutParams.WRAP_CONTENT);
+                    adContainerView.setVisibility(View.VISIBLE);
+                    adContainerView.setForegroundGravity(Gravity.CENTER);
+                    adContainerView.setPadding(0, top, 0, bottom);
+                    adContainerView.addView(startAppBanner, bannerParameters);
+                }
+            } else {
+                com.facebook.ads.AdView adView;
+                AudienceNetworkAds.initialize(this);
+                adView = new com.facebook.ads.AdView(this, defaultAdsIds.FB_BANNER1(), com.facebook.ads.AdSize.BANNER_HEIGHT_50);
+                final FrameLayout adContainerView = findViewById(R.id.banner_container);
+                adContainerView.setVisibility(View.VISIBLE);
+                adContainerView.setPadding(0, top, 0, bottom);
+                adContainerView.addView(adView);
+                adView.loadAd();
+                adView.setAdListener(new AdListener() {
+                    @Override
+                    public void onError(Ad ad, AdError adError) {
+
+                    }
+
+                    @Override
+                    public void onAdLoaded(Ad ad) {
+                        adContainerView.setBackground(getResources().getDrawable(R.drawable.bg_banner));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            getResources().getDrawable(R.drawable.bg_banner).setTint(defaultAdsIds.TINT_COLOR());
+                        }
+
+                    }
+
+                    @Override
+                    public void onAdClicked(Ad ad) {
+
+                    }
+
+                    @Override
+                    public void onLoggingImpression(Ad ad) {
+
+                    }
+                });
+
+            }
+        }
+    }
+
+    private void inflateNativeBannerAdFacebook(NativeBannerAd nativeBannerAd) {
+        // Unregister last ad
+        nativeBannerAd.unregisterView();
+
+        // Add the Ad view into the ad container.
+        NativeAdLayout nativeAdLayout = new NativeAdLayout(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        // Inflate the Ad view.  The layout referenced is the one you created in the last step.
+        FrameLayout adContainer = (FrameLayout)findViewById(R.id.native_banner_container);
+        LinearLayout adView = (LinearLayout) inflater.inflate(R.layout.native_banner_ad_layout_facebook, adContainer, false);
+        nativeAdLayout.addView(adView);
+
+        // Add the AdChoices icon
+        RelativeLayout adChoicesContainer = adView.findViewById(R.id.ad_choices_container);
+        AdOptionsView adOptionsView = new AdOptionsView(this, nativeBannerAd, nativeAdLayout);
+        adChoicesContainer.removeAllViews();
+        adChoicesContainer.addView(adOptionsView, 0);
+
+        // Create native UI using the ad metadata.
+        TextView nativeAdTitle = adView.findViewById(R.id.native_ad_title);
+        TextView nativeAdSocialContext = adView.findViewById(R.id.native_ad_social_context);
+        TextView sponsoredLabel = adView.findViewById(R.id.native_ad_sponsored_label);
+        AdIconView nativeAdIconView = adView.findViewById(R.id.native_icon_view);
+        Button nativeAdCallToAction = adView.findViewById(R.id.native_ad_call_to_action);
+
+        // Set the Text.
+        nativeAdCallToAction.setText(nativeBannerAd.getAdCallToAction());
+        nativeAdCallToAction.setVisibility(
+                nativeBannerAd.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
+        nativeAdTitle.setText(nativeBannerAd.getAdvertiserName());
+        nativeAdSocialContext.setText(nativeBannerAd.getAdSocialContext());
+        sponsoredLabel.setText(nativeBannerAd.getSponsoredTranslation());
+
+        // Register the Title and CTA button to listen for clicks.
+        List<View> clickableViews = new ArrayList<>();
+        clickableViews.add(nativeAdTitle);
+        clickableViews.add(nativeAdCallToAction);
+        nativeBannerAd.registerViewForInteraction(adView, nativeAdIconView, clickableViews);
     }
 
     public void showBannerAd(Integer top, Integer bottom) {
