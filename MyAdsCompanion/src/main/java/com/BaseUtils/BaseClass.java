@@ -252,7 +252,7 @@ public class BaseClass extends AppCompatActivity {
                     if (adsPrefernce.showgBanner1()) {
                         AdView gadView;
                         MobileAds.initialize(this, adsPrefernce.gAppId());
-                        final FrameLayout adContainerView = this.findViewById(R.id.banner_container);
+                        final FrameLayout adContainerView = this.findViewById(R.id.native_banner_container);
                         adContainerView.setVisibility(View.VISIBLE);
                         gadView = new AdView(this);
                         adContainerView.setPadding(0, top, 0, bottom);
@@ -278,7 +278,6 @@ public class BaseClass extends AppCompatActivity {
                             nativeBannerAd = new NativeBannerAd(this, adsPrefernce.fbNativeBannerId());
                             final FrameLayout adContainerView = findViewById(R.id.native_banner_container);
                             adContainerView.setVisibility(View.VISIBLE);
-//                            adContainerView.addView(nativeBannerAd);
                             adContainerView.setPadding(0, top, 0, bottom);
                             nativeBannerAd.loadAd();
                             nativeBannerAd.setAdListener(new NativeAdListener() {
@@ -354,7 +353,6 @@ public class BaseClass extends AppCompatActivity {
                 nativeBannerAd = new NativeBannerAd(this, defaultAdsIds.FB_NATIVE_BANNER1());
                 final FrameLayout adContainerView = findViewById(R.id.native_banner_container);
                 adContainerView.setVisibility(View.VISIBLE);
-//                            adContainerView.addView(nativeBannerAd);
                 adContainerView.setPadding(0, top, 0, bottom);
                 nativeBannerAd.loadAd();
                 nativeBannerAd.setAdListener(new NativeAdListener() {
@@ -402,7 +400,6 @@ public class BaseClass extends AppCompatActivity {
         // Inflate the Ad view.  The layout referenced is the one you created in the last step.
         FrameLayout adContainer = (FrameLayout)findViewById(R.id.native_banner_container);
         LinearLayout adView = (LinearLayout) inflater.inflate(R.layout.native_banner_ad_layout_facebook, adContainer, false);
-//        nativeAdLayout.addView(adView);
         adContainer.addView(adView);
 
         // Add the AdChoices icon
