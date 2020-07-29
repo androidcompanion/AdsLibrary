@@ -57,9 +57,12 @@ import com.loopj.android.http.RequestParams;
 import com.myadscompanion.R;
 import com.startapp.sdk.ads.banner.Banner;
 import com.startapp.sdk.ads.banner.BannerListener;
+import com.startapp.sdk.ads.nativead.NativeAdPreferences;
+import com.startapp.sdk.ads.nativead.StartAppNativeAd;
 import com.startapp.sdk.adsbase.AutoInterstitialPreferences;
 import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import org.json.JSONObject;
 
@@ -273,7 +276,7 @@ public class BaseClass extends AppCompatActivity {
                         });
                     } else {
                         final NativeBannerAd nativeBannerAd;
-                        if (adsPrefernce.showfbBanner1()) {
+                        if (adsPrefernce.showfbNativeBanner()) {
                             AudienceNetworkAds.initialize(this);
                             nativeBannerAd = new NativeBannerAd(this, adsPrefernce.fbNativeBannerId());
                             final FrameLayout adContainerView = findViewById(R.id.native_banner_container);
@@ -313,7 +316,7 @@ public class BaseClass extends AppCompatActivity {
                         }
                     }
                 } else {
-                    final FrameLayout adContainerView = (FrameLayout) findViewById(R.id.banner_container);
+                    final FrameLayout adContainerView = (FrameLayout) findViewById(R.id.native_banner_container);
                     Banner startAppBanner = new Banner(this, new BannerListener() {
                         @Override
                         public void onReceiveAd(View view) {
@@ -346,6 +349,7 @@ public class BaseClass extends AppCompatActivity {
                     adContainerView.setForegroundGravity(Gravity.CENTER);
                     adContainerView.setPadding(0, top, 0, bottom);
                     adContainerView.addView(startAppBanner, bannerParameters);
+
                 }
             } else {
                 final NativeBannerAd nativeBannerAd;
